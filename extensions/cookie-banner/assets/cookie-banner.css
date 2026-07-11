@@ -1,0 +1,79 @@
+/* Featherbyte Cookie Banner — lightweight styles */
+.fb-cookie {
+  position: fixed;
+  z-index: 2147483000;
+  max-width: 420px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  animation: fb-in .25s ease;
+}
+.fb-cookie * { box-sizing: border-box; }
+
+@keyframes fb-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* positions */
+.fb-pos-bottom-left { left: 16px; bottom: 16px; }
+.fb-pos-bottom-right { right: 16px; bottom: 16px; }
+.fb-pos-bottom { left: 16px; right: 16px; bottom: 0; max-width: none; }
+.fb-pos-center {
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
+}
+
+.fb-card {
+  background: var(--fb-bg);
+  color: var(--fb-text);
+  border-radius: var(--fb-radius);
+  padding: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .18);
+  border: 1px solid rgba(0, 0, 0, .08);
+}
+.fb-pos-bottom .fb-card { border-radius: 0; }
+
+.fb-msg {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.fb-link { color: inherit; text-decoration: underline; }
+
+.fb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fb-pos-bottom .fb-actions { justify-content: flex-end; }
+
+.fb-btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: calc(var(--fb-radius) - 4px);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity .15s ease;
+}
+.fb-btn:hover { opacity: .85; }
+.fb-primary { background: var(--fb-btn); color: var(--fb-btn-text); }
+.fb-ghost {
+  background: transparent;
+  color: var(--fb-text);
+  border-color: rgba(128, 128, 128, .4);
+}
+
+.fb-prefs { margin-top: 14px; border-top: 1px solid rgba(128,128,128,.2); padding-top: 12px; }
+.fb-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.fb-row input { width: 16px; height: 16px; accent-color: var(--fb-btn); }
+.fb-save { margin-top: 10px; width: 100%; }
+
+@media (max-width: 480px) {
+  .fb-cookie { left: 0 !important; right: 0 !important; bottom: 0 !important; top: auto !important; transform: none !important; max-width: none; }
+  .fb-card { border-radius: var(--fb-radius) var(--fb-radius) 0 0; }
+}

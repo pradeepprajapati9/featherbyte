@@ -1,0 +1,33 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "6384820163198aba75a1144711d64f17"
+name = "Featherbyte Cookie Banner"
+application_url = "https://example.com"
+embedded = true
+
+[access_scopes]
+# Featherbyte needs no admin write access — the banner runs client-side and
+# billing is app-level. Keep scopes empty for the least-privilege footprint.
+scopes = ""
+
+[webhooks]
+api_version = "2026-10"
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/uninstalled"
+  topics = [ "app/uninstalled" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/scopes_update"
+  topics = [ "app/scopes_update" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/compliance"
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true

@@ -1,0 +1,150 @@
+{% comment %}
+  Featherbyte Cookie Banner — app embed block
+  Lightweight GDPR/CCPA consent banner. No external libraries.
+{% endcomment %}
+
+<script>
+  window.FeatherbyteCookieConfig = {
+    message: {{ block.settings.message | json }},
+    acceptText: {{ block.settings.accept_text | json }},
+    declineText: {{ block.settings.decline_text | json }},
+    prefsText: {{ block.settings.prefs_text | json }},
+    saveText: {{ block.settings.save_text | json }},
+    policyUrl: {{ block.settings.policy_url | json }},
+    policyText: {{ block.settings.policy_text | json }},
+    position: {{ block.settings.position | json }},
+    bgColor: {{ block.settings.bg_color | json }},
+    textColor: {{ block.settings.text_color | json }},
+    btnColor: {{ block.settings.btn_color | json }},
+    btnTextColor: {{ block.settings.btn_text_color | json }},
+    borderRadius: {{ block.settings.border_radius | json }},
+    consentMode: {{ block.settings.consent_mode | json }},
+    regionMode: {{ block.settings.region_mode | json }}
+  };
+</script>
+<script src="{{ 'cookie-banner.js' | asset_url }}" defer></script>
+{{ 'cookie-banner.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+{
+  "name": "Cookie Banner",
+  "target": "body",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Banner message",
+      "default": "We use cookies to improve your experience, analyze traffic, and for marketing. You can accept or manage your preferences."
+    },
+    {
+      "type": "text",
+      "id": "accept_text",
+      "label": "Accept button text",
+      "default": "Accept all"
+    },
+    {
+      "type": "text",
+      "id": "decline_text",
+      "label": "Decline button text",
+      "default": "Decline"
+    },
+    {
+      "type": "text",
+      "id": "prefs_text",
+      "label": "Preferences button text",
+      "default": "Manage preferences"
+    },
+    {
+      "type": "text",
+      "id": "save_text",
+      "label": "Save preferences button text",
+      "default": "Save preferences"
+    },
+    {
+      "type": "text",
+      "id": "policy_text",
+      "label": "Privacy policy link text",
+      "default": "Privacy policy"
+    },
+    {
+      "type": "url",
+      "id": "policy_url",
+      "label": "Privacy policy link"
+    },
+    {
+      "type": "header",
+      "content": "Behaviour"
+    },
+    {
+      "type": "select",
+      "id": "region_mode",
+      "label": "Show banner to",
+      "options": [
+        { "value": "eea", "label": "EU/EEA & UK visitors only (recommended)" },
+        { "value": "all", "label": "All visitors" }
+      ],
+      "default": "eea"
+    },
+    {
+      "type": "checkbox",
+      "id": "consent_mode",
+      "label": "Enable Google Consent Mode v2",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        { "value": "bottom", "label": "Bottom bar" },
+        { "value": "bottom-left", "label": "Bottom left box" },
+        { "value": "bottom-right", "label": "Bottom right box" },
+        { "value": "center", "label": "Center popup" }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Accept button color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Accept button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    }
+  ]
+}
+{% endschema %}
