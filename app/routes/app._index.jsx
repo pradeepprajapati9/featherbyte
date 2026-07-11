@@ -184,8 +184,8 @@ export default function Index() {
 
       <s-section slot="aside" heading="Need help?">
         <s-paragraph>
-          Email support@featherbyte.app and we’ll reply fast — a real person,
-          not an auto-bot.
+          Email prajapatipradeepkumar954@gmail.com and we’ll reply fast — a real
+          person, not an auto-bot.
         </s-paragraph>
       </s-section>
     </s-page>

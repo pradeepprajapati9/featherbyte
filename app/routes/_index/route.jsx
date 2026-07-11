@@ -18,9 +18,11 @@ export default function App() {
   return (
     <div className={styles.index}>
       <div className={styles.content}>
-        <h1 className={styles.heading}>A short heading about [your app]</h1>
+        <h1 className={styles.heading}>Featherbyte Cookie Banner</h1>
         <p className={styles.text}>
-          A tagline about [your app] that describes your value proposition.
+          A fast, lightweight GDPR &amp; CCPA cookie consent banner for Shopify —
+          with Google Consent Mode v2 built in. No page-speed hit, no broken
+          checkout.
         </p>
         {showForm && (
           <Form className={styles.form} method="post" action="/auth/login">
@@ -36,16 +38,16 @@ export default function App() {
         )}
         <ul className={styles.list}>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Feather-light</strong>. A tiny script — your store stays fast
+            and keeps its Google ranking.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Checkout-safe</strong>. Never touches or breaks your cart or
+            checkout.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Google Consent Mode v2</strong>. Sends the correct signals so
+            your Google Ads &amp; Analytics keep working.
           </li>
         </ul>
       </div>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Featherbyte icon generator</title>
+<style>
+  body{font-family:Inter,Arial,sans-serif;background:#0f1115;color:#eee;text-align:center;padding:32px;margin:0}
+  canvas{width:300px;height:300px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  button{margin-top:24px;padding:14px 28px;font-size:16px;font-weight:700;border:0;border-radius:10px;background:#5b8def;color:#fff;cursor:pointer}
+  button:hover{opacity:.9}
+  p{color:#9aa;max-width:420px;margin:16px auto}
+</style>
+</head>
+<body>
+  <h2>Featherbyte App Icon</h2>
+  <canvas id="c" width="1200" height="1200"></canvas>
+  <p>Yeh 1200×1200 icon hai (Shopify ki requirement). Neeche button daba ke PNG download kar.</p>
+  <button onclick="dl()">⬇ Download PNG (1200×1200)</button>
+
+<script>
+const cv = document.getElementById('c');
+const x = cv.getContext('2d');
+
+// background gradient
+const g = x.createLinearGradient(0,0,1200,1200);
+g.addColorStop(0,'#4f46e5');
+g.addColorStop(1,'#0ea5a4');
+x.fillStyle = g;
+x.fillRect(0,0,1200,1200);
+
+// soft glow
+const rg = x.createRadialGradient(600,520,60,600,520,620);
+rg.addColorStop(0,'rgba(255,255,255,.18)');
+rg.addColorStop(1,'rgba(255,255,255,0)');
+x.fillStyle = rg;
+x.fillRect(0,0,1200,1200);
+
+// cookie
+x.save();
+x.translate(600,560);
+x.fillStyle = '#f4d9a6';
+x.beginPath();
+x.arc(0,0,300,0,Math.PI*2);
+x.fill();
+// cookie edge shade
+x.strokeStyle = 'rgba(123,75,39,.25)';
+x.lineWidth = 10;
+x.stroke();
+// chocolate chips
+const chips = [[-120,-90,34],[70,-140,26],[150,-20,30],[-40,40,28],[110,120,32],[-150,110,24],[10,-30,20],[-90,180,18]];
+x.fillStyle = '#5b3a1e';
+for(const [cx,cy,r] of chips){ x.beginPath(); x.arc(cx,cy,r,0,Math.PI*2); x.fill(); }
+x.restore();
+
+// consent check badge (bottom-right)
+x.save();
+x.translate(830,800);
+x.fillStyle = '#22c55e';
+x.beginPath();
+x.arc(0,0,140,0,Math.PI*2);
+x.fill();
+x.strokeStyle = '#fff';
+x.lineWidth = 28;
+x.lineCap = 'round';
+x.lineJoin = 'round';
+x.beginPath();
+x.moveTo(-60,5);
+x.lineTo(-15,55);
+x.lineTo(70,-55);
+x.stroke();
+x.restore();
+
+function dl(){
+  const a = document.createElement('a');
+  a.download = 'featherbyte-icon.png';
+  a.href = cv.toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>
