@@ -2,7 +2,7 @@
 
 client_id = "6384820163198aba75a1144711d64f17"
 name = "Featherbyte Cookie Banner"
-application_url = "https://example.com"
+application_url = "https://featherbyte.onrender.com"
 embedded = true
 
 [access_scopes]
@@ -26,8 +26,11 @@ api_version = "2026-10"
   compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [
+  "https://featherbyte.onrender.com/auth/callback",
+  "https://featherbyte.onrender.com/auth/shopify/callback",
+  "https://featherbyte.onrender.com/api/auth/callback"
+]
 
 [build]
-include_config_on_deploy = true
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
