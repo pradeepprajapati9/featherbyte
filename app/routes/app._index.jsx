@@ -34,7 +34,10 @@ export const action = async ({ request }) => {
     return { alreadyActive: true, confirmationUrl: null, errors: [] };
   }
 
-  const returnUrl = `${process.env.SHOPIFY_APP_URL}/app?shop=${session.shop}`;
+  // Return the merchant straight to the embedded app inside Shopify admin.
+  // (The admin app URL is keyed by the app's client id / API key.)
+  const storeHandle = session.shop.replace(".myshopify.com", "");
+  const returnUrl = `https://admin.shopify.com/store/${storeHandle}/apps/${process.env.SHOPIFY_API_KEY}`;
 
   const response = await admin.graphql(
     `#graphql
