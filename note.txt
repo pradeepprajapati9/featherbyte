@@ -1,0 +1,10 @@
+Backup status (poora confirm):
+✅ App code — GitHub pe (github.com/pradeepprajapati9/featherbyte, private)
+✅ Icon + screenshots + scripts — abhi push kar diye
+✅ .env (DB password) — git pe NAHI (gitignored, secret leak-proof)
+✅ App live — Render pe 24/7
+✅ Database — Neon cloud pe
+✅ Submitted — Shopify review me
+
+# Neon Postgres connection string
+DATABASE_URL="postgresql://neondb_owner:npg_G2DFdyOt4pnf@ep-curly-shadow-atyggmem.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require"

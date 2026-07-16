@@ -3,30 +3,43 @@ import { useLoaderData, useFetcher } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate, PRO_PLAN } from "../shopify.server";
 
+async function hasActiveSubscription(admin) {
+  try {
+    const resp = await admin.graphql(
+      `#graphql
+      query { currentAppInstallation { activeSubscriptions { status } } }`,
+    );
+    const data = await resp.json();
+    return (
+      data?.data?.currentAppInstallation?.activeSubscriptions || []
+    ).some((s) => s.status === "ACTIVE");
+  } catch (e) {
+    return false;
+  }
+}
+
 export const loader = async ({ request }) => {
-  const { session, billing } = await authenticate.admin(request);
+  const { session, admin } = await authenticate.admin(request);
   const shop = session.shop;
   const editorUrl = `https://${shop}/admin/themes/current/editor?context=apps`;
-
-  let isPro = false;
-  try {
-    const check = await billing.check({ plans: [PRO_PLAN], isTest: true });
-    isPro = check.hasActivePayment;
-  } catch (e) {
-    isPro = false;
-  }
-
+  const isPro = await hasActiveSubscription(admin);
   return { shop, editorUrl, isPro };
 };
 
 export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const returnUrl = `${process.env.SHOPIFY_APP_URL}/app`;
+  const { session, admin } = await authenticate.admin(request);
+
+  // Don't create a second charge if one is already active.
+  if (await hasActiveSubscription(admin)) {
+    return { alreadyActive: true, confirmationUrl: null, errors: [] };
+  }
+
+  const returnUrl = `${process.env.SHOPIFY_APP_URL}/app?shop=${session.shop}`;
 
   const response = await admin.graphql(
     `#graphql
-    mutation CreateSubscription($name: String!, $returnUrl: URL!, $test: Boolean!, $lineItems: [AppSubscriptionLineItemInput!]!) {
-      appSubscriptionCreate(name: $name, returnUrl: $returnUrl, test: $test, lineItems: $lineItems) {
+    mutation CreateSubscription($name: String!, $returnUrl: URL!, $test: Boolean!, $trialDays: Int!, $lineItems: [AppSubscriptionLineItemInput!]!) {
+      appSubscriptionCreate(name: $name, returnUrl: $returnUrl, test: $test, trialDays: $trialDays, lineItems: $lineItems) {
         userErrors { field message }
         confirmationUrl
         appSubscription { id status }
@@ -36,7 +49,8 @@ export const action = async ({ request }) => {
       variables: {
         name: "Featherbyte Pro",
         returnUrl,
-        test: true,
+        test: false,
+        trialDays: 14,
         lineItems: [
           {
             plan: {
@@ -66,7 +80,8 @@ export default function Index() {
   useEffect(() => {
     const url = fetcher.data?.confirmationUrl;
     if (url) {
-      // App Bridge intercepts open(_top) to redirect the top frame safely
+      // App Bridge intercepts open(_top) to redirect the top frame to the
+      // Shopify charge-approval screen.
       open(url, "_top");
     }
   }, [fetcher.data]);
@@ -87,7 +102,7 @@ export default function Index() {
 
       <s-section heading="Welcome 👋 Let’s get you compliant in 2 minutes">
         <s-paragraph>
-          Featherbyte adds a fast, lightweight cookie consent banner to your
+          Featherbyte adds a lightweight cookie consent banner to your
           storefront — GDPR &amp; CCPA ready, with Google Consent Mode v2 built
           in. No page-speed hit, no broken checkout.
         </s-paragraph>
@@ -122,7 +137,7 @@ export default function Index() {
         <s-unordered-list>
           <s-list-item>
             <s-text><strong>Feather-light.</strong></s-text> No heavy scripts —
-            your store stays fast and keeps its Google ranking.
+            your store stays quick and keeps its Google ranking.
           </s-list-item>
           <s-list-item>
             <s-text><strong>Checkout-safe.</strong></s-text> Never touches or
@@ -149,7 +164,7 @@ export default function Index() {
           <s-stack direction="block" gap="base">
             <s-paragraph>
               You’re on the <s-text><strong>Free</strong></s-text> plan. Upgrade
-              to Pro for priority support, consent analytics and no branding.
+              to Pro for priority support and no branding.
             </s-paragraph>
             <s-paragraph>
               <s-text><strong>$6.99/month</strong></s-text> · 14-day free trial
@@ -166,18 +181,10 @@ export default function Index() {
             {fetcher.data?.errors?.length > 0 && (
               <s-paragraph>
                 <s-text tone="critical">
-                  Error: {fetcher.data.errors.map((e) => e.message).join(", ")}
+                  {fetcher.data.errors.map((e) => e.message).join(", ")}
                 </s-text>
               </s-paragraph>
             )}
-            {fetcher.data && !fetcher.data.confirmationUrl &&
-              !(fetcher.data.errors?.length) && (
-                <s-paragraph>
-                  <s-text tone="critical">
-                    No confirmation URL returned — check server logs.
-                  </s-text>
-                </s-paragraph>
-              )}
           </s-stack>
         )}
       </s-section>
