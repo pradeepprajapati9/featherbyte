@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLoaderData, useFetcher } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
-import { authenticate, PRO_PLAN } from "../shopify.server";
+import { authenticate } from "../shopify.server";
 
 async function hasActiveSubscription(admin) {
   try {
