@@ -34,6 +34,20 @@ export const action = async ({ request }) => {
     return { alreadyActive: true, confirmationUrl: null, errors: [] };
   }
 
+  // Development/partner stores can't process real charges, so use a test
+  // charge for them and a real charge for live merchant stores.
+  let isTest = false;
+  try {
+    const planResp = await admin.graphql(
+      `#graphql
+      query { shop { plan { partnerDevelopment } } }`,
+    );
+    const planData = await planResp.json();
+    isTest = planData?.data?.shop?.plan?.partnerDevelopment === true;
+  } catch (e) {
+    isTest = false;
+  }
+
   // Return the merchant straight to the embedded app inside Shopify admin.
   // (The admin app URL is keyed by the app's client id / API key.)
   const storeHandle = session.shop.replace(".myshopify.com", "");
@@ -52,7 +66,7 @@ export const action = async ({ request }) => {
       variables: {
         name: "Featherbyte Pro",
         returnUrl,
-        test: false,
+        test: isTest,
         trialDays: 14,
         lineItems: [
           {
